@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                             totalWeight = totalWeight+weightsArray[i];
                         }
                         Double average = totalWeight/numOfAirConditioners;
-                        String finalResult = String.format("%.2f", average);
+                        String finalResult = String.format("%.2f Cubic Meters", average);
                         TextView myAwesomeTextView = (TextView)findViewById(R.id.averageWeightTextView);
                         myAwesomeTextView.setText(finalResult);
                         Log.i("FinalResult", finalResult);
