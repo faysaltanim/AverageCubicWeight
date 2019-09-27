@@ -20,14 +20,14 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    Double[] weightsArray = new Double[100000];
-    int numOfAirConditioners = 0;
+    String PRIMARY_URL = "http://wp8m3he1wt.s3-website-ap-southeast-2.amazonaws.com";
     String INITIAL_API = "/api/products/1";
 
-    public void asyncTaskExcutor(String urlPart){
+    Double[] weightsArray = new Double[10000000];
+    int numOfAirConditioners = 0;
 
+    public void asyncTaskExcutor(String urlPart){
         DownloadTask task = new DownloadTask();
-        String PRIMARY_URL = "http://wp8m3he1wt.s3-website-ap-southeast-2.amazonaws.com";
         String executingURL = PRIMARY_URL+urlPart;
         task.execute(executingURL);
     }
@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
@@ -81,32 +80,25 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray arr = new JSONArray(objectsInfo);
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject jsonPart = arr.getJSONObject(i);
-
-
                         if(jsonPart.getString("category").equals("Air Conditioners")) {
-
                             String size = jsonPart.getString("size");
-
                             JSONObject dimensions = new JSONObject(size);
                             Double weight = ((dimensions.getDouble("width")/100) * (dimensions.getDouble("length")/100)*(dimensions.getDouble("height")/100))*250;
                             weightsArray[numOfAirConditioners]=weight;
                             numOfAirConditioners++;
                         }
-
-                        }
+                    }
 
                     if(nextURL.equals("null")) {
                         Double totalWeight=0.0;
-                        for(int i =0; i<numOfAirConditioners; i++)
-                        {
+                        for(int i =0; i<numOfAirConditioners; i++) {
                             totalWeight = totalWeight+weightsArray[i];
                         }
                         Double average = totalWeight/numOfAirConditioners;
-                        String finalResult = String.format("%.2f Cubic Meters", average);
+                        String finalResult = String.format("%.2f kg", average);
                         TextView myAwesomeTextView = (TextView)findViewById(R.id.averageWeightTextView);
                         myAwesomeTextView.setText(finalResult);
                         Log.i("FinalResult", finalResult);
-
                     }
                     else{
                         asyncTaskExcutor(nextURL);
